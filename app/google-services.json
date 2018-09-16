@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "560530870668",
+    "firebase_url": "https://htn2018-dcc64.firebaseio.com",
+    "project_id": "htn2018-dcc64",
+    "storage_bucket": "htn2018-dcc64.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560530870668:android:c6bf2e0a276cace8",
+        "android_client_info": {
+          "package_name": "com.lumibao.hackthenorthandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560530870668-hvp95379refc59b3artumanaloqdag4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeGoFfbsErJkWw_d27EZpD503YGTRLifs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

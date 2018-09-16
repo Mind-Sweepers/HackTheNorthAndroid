@@ -19,17 +19,23 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button btnVoice;
     private TextView txtTest;
+    private TextView txtCode;
     SpeechRecognizer mSpeechRecognizer;
     Intent mSpeechRecognizerIntent;
-
+    private DatabaseReference mDatabaseReference;
     boolean toggle = false;
+    private String uuid;
 
     private SpeechRecognizer getSpeechRecognizer() {
         if (mSpeechRecognizer == null) {
@@ -110,7 +116,9 @@ public class MainActivity extends AppCompatActivity {
 
                     if (matches != null) {
                         txtTest.setText(matches.get(0));
+                        mDatabaseReference.child(uuid).push().setValue(matches.get(0));
                     }
+
 
                     startVoiceRead();
                 }
@@ -135,7 +143,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         checkPermission();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         txtTest = findViewById(R.id.txtTest);
+        txtCode = findViewById(R.id.txtCode);
+        generateString();
 
         btnVoice = findViewById(R.id.btnVoice);
         btnVoice.setOnClickListener(new View.OnClickListener() {
@@ -175,6 +186,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public String generateString() {
+        uuid = UUID.randomUUID().toString().substring(0,5);
+        txtCode.setText(uuid);
+        return uuid;
+    }
 //    void voicePrompt() {
 //        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 //        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
