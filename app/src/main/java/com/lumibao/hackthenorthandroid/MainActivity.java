@@ -3,6 +3,7 @@ package com.lumibao.hackthenorthandroid;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Debug;
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                             message = "Not recognised";
                             break;
                     }
-                    txtTest.append("onError code:" + error + " message: " + message);
+                    Log.d("onError code:", error + " message: " + message);
 
                     startVoiceRead();
                 }
@@ -155,8 +156,10 @@ public class MainActivity extends AppCompatActivity {
                 toggle = !toggle;
 
                 if (toggle) {
+                    btnVoice.setBackgroundColor(Color.RED);
                     startVoiceRead();
                 } else {
+                    btnVoice.setBackgroundColor(Color.GREEN);
                     stopVoiceRead();
                 }
             }
@@ -170,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void stopVoiceRead() {
+        btnVoice.setBackgroundColor(Color.GREEN);
+
         if (mSpeechRecognizer != null) {
             mSpeechRecognizer.destroy();
             mSpeechRecognizer = null;

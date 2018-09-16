@@ -10,7 +10,7 @@
         android:id="@+id/txtTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -20,7 +20,9 @@
         android:id="@+id/txtCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:fontFamily="sans-serif"
+        android:text="Code"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -29,9 +31,10 @@
 
     <Button
         android:id="@+id/btnVoice"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:background="@android:color/holo_green_light"
+        android:text="Start"
         tools:layout_editor_absoluteX="147dp"
         tools:layout_editor_absoluteY="391dp" />
 
