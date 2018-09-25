@@ -1,6 +1,7 @@
 package com.lumibao.hackthenorthandroid;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -14,6 +15,8 @@ import android.speech.SpeechRecognizer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,8 +25,12 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -37,6 +44,15 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
     boolean toggle = false;
     private String uuid;
+
+    private String mLanguage;
+
+    // Displaying messages
+    private Context context;
+    private List<Message> messageList;
+    private RecyclerView messageListView;
+    private RecyclerViewAdapter messageListAdapter;
+
 
     private SpeechRecognizer getSpeechRecognizer() {
         if (mSpeechRecognizer == null) {
@@ -114,12 +130,19 @@ public class MainActivity extends AppCompatActivity {
                 public void onResults(Bundle results) {
                     Log.d("onResults", "onResults");
                     ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString = format.format(new Date());
+
+                    Log.d("dateString: ", dateString);
+
+                    Message message = new Message(mLanguage, dateString, matches.get(0));
+                    messageList.add(message);
+                    messageListAdapter.notifyDataSetChanged();
 
                     if (matches != null) {
                         txtTest.setText(matches.get(0));
-                        mDatabaseReference.child(uuid).push().setValue(matches.get(0));
+                        mDatabaseReference.child(uuid).setValue(messageList);
                     }
-
 
                     startVoiceRead();
                 }
@@ -143,9 +166,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context = getApplicationContext();
         checkPermission();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        txtTest = findViewById(R.id.txtTest);
         txtCode = findViewById(R.id.txtCode);
         generateString();
 
@@ -164,11 +187,25 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = format.format(new Date());
+
+        messageList = new ArrayList<Message>();
+        mLanguage = Locale.getDefault().getLanguage();
+        Log.d("messageList Length: ", Integer.toString(messageList.size()));
+
+        // Set up RecyclerView
+        messageListAdapter = new RecyclerViewAdapter(this, messageList);
+        messageListView = (RecyclerView) findViewById(R.id.lst_message);
+        messageListView.setLayoutManager(new LinearLayoutManager(this));
+        messageListView.setAdapter(messageListAdapter);
     }
 
     public void startVoiceRead() {
         Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
         getSpeechRecognizer().startListening(speechIntent);
     }
 
